@@ -1,0 +1,55 @@
+/*
+  .size-xxs(12);
+  .size-xs(12);
+  .size-sm(10);
+  .size-md(6);
+  .size-lg(2);
+  */
+
+.reset();
+
+.wrapper {
+  .wrapper();
+}
+
+
+/*
+.debug {
+  position: relative;
+  .debug(rgba(0, 0, 0, 0.1), 1px solid #ff0);
+}
+*/
+
+
+.visually-hidden {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  font-size: 0;
+  overflow: hidden;
+}
+
+.button {
+  background-color: @base;
+  padding-left: 40px;
+  padding-right: 40px;
+  border-radius: 10px;
+
+  &:hover {
+    background-color: @light;
+    color: @dark;
+  }
+}
+
+html {
+  height: 100%;
+}
+
+.paragraf {
+  padding-left: 30%;
+  padding-top: 10%;
+  font-size: 70px;
+  color: red;
+}
