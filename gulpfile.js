@@ -16,7 +16,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const mqpacker = require("css-mqpacker");
 const sortCSSmq = require('sort-css-media-queries');
 
-const  fileinclude = require("gulp-file-include");
+const fileinclude = require("gulp-file-include");
 
 
 //
@@ -30,13 +30,12 @@ gulp.task("copy", function () {
         "src/fonts/**/*.{woff,woff2}",
         "src/img/**",
         "src/js/**",
-        "src/*.html"
+        "src/index.html"
     ], {
         base: "src"
     })
         .pipe(gulp.dest("build"));
 });
-
 
 
 gulp.task("css", function () {
@@ -45,9 +44,7 @@ gulp.task("css", function () {
         .pipe(plumber())
         .pipe(less())
         .pipe(postcss([
-            autoprefixer({
-
-            }),
+            autoprefixer({}),
             mqpacker({
                 sort: sortCSSmq
             })
@@ -61,14 +58,16 @@ gulp.task("css", function () {
         .pipe(server.stream());
 });
 
+
 gulp.task("html", function () {
-    gulp.src("src/**/*.html")
+    gulp.src("src/*.html")
         .pipe(posthtml([
             include()
         ]))
         .pipe(gulp.dest("build"))
         .pipe(server.stream());
 });
+
 
 gulp.task("fileinclude", function () {
     return gulp.src("src/*_build.html")
@@ -84,15 +83,10 @@ gulp.task("fileinclude", function () {
 });
 
 
-
-
-
 gulp.task("build", gulp.series(
     "clean",
     "copy",
     "css",
-    "fileinclude",
-
 ));
 
 gulp.task("server", function () {
@@ -105,11 +99,10 @@ gulp.task("server", function () {
     });
 
 
-
-
     gulp.watch("src/less/**/*.less", gulp.series("css")).on("change", server.reload);
     gulp.watch("src/*_build.html", gulp.parallel("fileinclude")).on("change", server.reload); // наблюдаем и исполняем
-    gulp.watch("src/templates/*.html", gulp.parallel("fileinclude")).on("change", server.reload); // наблюдаем и исполняем
+    gulp.watch("src/html/*.html", gulp.parallel("fileinclude")).on("change", server.reload); // наблюдаем и исполняем
+    gulp.watch("src/*.html", gulp.series("build")).on("change", server.reload);
     gulp.watch("src/js/*.js").on("change", server.reload);
 });
 
