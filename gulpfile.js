@@ -2,7 +2,7 @@
 
 const gulp = require("gulp"); // Подключаем Gulp
 const less = require("gulp-less"); //Подключаем Less пакет
-const minifycss = require("gulp-csso");
+const minifycss = require("gulp-csso"); // CSS минификатор
 const plumber = require("gulp-plumber");
 const autoprefixer = require("autoprefixer"); // Подключаем библиотеку для автопрефиксов
 const postcss = require("gulp-postcss");
@@ -107,4 +107,4 @@ gulp.task("server", function () {
 });
 
 
-gulp.task("s", gulp.series("build", "server")); // запускаем командой gulp s (сокращенно от start)
+gulp.task("default", gulp.series("build", "server")); // запускаем командой gulp ("default")
