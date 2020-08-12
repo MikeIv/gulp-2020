@@ -1,23 +1,23 @@
-# Сборка Gulp 2020 
+# Gulp 2020 
 
 
-* Верстальщик: Михаил Иванов.
+* Разработчик: Михаил Иванов.
 
 ---
 
-**Обновленная сборка**
+**Сборка 2020**
 
-- новое – **html шаблонизация** 
+- новое – **html шаблонизация и обновлен стартовый шаблон стилей** 
 
 
 ---
 
 **Статус**
 
-- в разработке
+- обновляется
 
 ---
 
-<a href="https://mcruises.ru">
-<img align="left" width="150" height="150" alt="Лого" src="https://mikeiv.github.io/portfolio/img/logo.svg">
+<a href="https://mikeivanov.ru/">
+<img align="left" width="110" height="128" alt="Лого" src="/img/my-logo.svg">
 </a>
