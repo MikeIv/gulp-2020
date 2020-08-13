@@ -151,9 +151,10 @@ img {
   width: 100%;
   min-height: 300px;
   margin: 0 auto;
-  background-color: #c1c1c1;
+  background-color: #a0a0a0;
 }
-.header-block {
+/*-- header --*/
+.header {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -167,16 +168,17 @@ img {
   height: 100px;
   margin: 0 auto;
   padding: 0;
-  background-color: #5c9ce6;
+  background-color: #5C9CE6;
 }
 .header__h2 {
   margin: 0;
   padding: 0;
   font-size: 2em;
   font-weight: bold;
-  color: #dfefff;
+  color: #004DA6;
 }
-.footer-block {
+/*-- footer --*/
+.footer {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -190,15 +192,14 @@ img {
   height: 100px;
   margin: 0 auto;
   padding: 0;
-  background-color: #bee6ca;
+  background-color: #003573;
 }
 .footer__h2 {
   margin: 0;
   padding: 0;
-  font-family: "Arial", sans-serif;
-  font-size: 30px;
+  font-size: 2em;
   font-weight: bold;
-  color: #484848;
+  color: #ffffff;
 }
 @media screen and (min-width: 780px) {
   .wrapper {
