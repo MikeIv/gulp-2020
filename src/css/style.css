@@ -129,11 +129,17 @@ img {
   font-size: 14px;
 }
 .page__body {
+  display: grid;
+  grid-template-areas: "header" "main" "footer";
+  grid-template-rows: 60px 1fr 100px;
+  grid-template-columns: 1fr;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 .main {
+  grid-area: main;
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
@@ -149,12 +155,12 @@ img {
   -webkit-align-items: center;
           align-items: center;
   width: 100%;
-  min-height: 300px;
   margin: 0 auto;
   background-color: #a0a0a0;
 }
 /*-- header --*/
 .header {
+  grid-area: header;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -165,7 +171,6 @@ img {
   -webkit-align-items: center;
           align-items: center;
   width: 100%;
-  height: 100px;
   margin: 0 auto;
   padding: 0;
   background-color: #5C9CE6;
@@ -179,6 +184,7 @@ img {
 }
 /*-- footer --*/
 .footer {
+  grid-area: footer;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -189,7 +195,6 @@ img {
   -webkit-align-items: center;
           align-items: center;
   width: 100%;
-  height: 100px;
   margin: 0 auto;
   padding: 0;
   background-color: #003573;
