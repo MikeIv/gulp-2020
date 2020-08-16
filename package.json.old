@@ -1,0 +1,60 @@
+{
+  "name": "Gulp-2020",
+  "version": "0.1.5",
+  "description": "gulp сборка с html шаблонами",
+  "main": "gulpfile.js",
+
+  "dependencies": {
+    "css-mqpacker": "^7.0.0",
+    "del": "^5.1.0",
+    "gulp-less": "^4.0.1",
+    "gulp-rename": "^2.0.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "sort-css-media-queries": "^1.5.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-csso": "^4.0.1",
+    "gulp-file-include": "^2.1.1",
+    "gulp-plumber": "^1.2.1",
+    "gulp-postcss": "^8.0.0",
+    "gulp-posthtml": "^3.0.4"
+  },
+
+
+  "private": true,
+  "scripts": {
+    "start": "gulp"
+  },
+
+  "browserslist": [
+    "> 1%",
+    "ie >= 11",
+    "edge >= 15",
+    "ie_mob >= 11",
+    "ff >= 45",
+    "chrome >= 45",
+    "safari >= 7",
+    "opera >= 23",
+    "ios >= 7",
+    "android >= 4",
+    "bb >= 10"
+  ],
+
+
+
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MikeIv/Gulp-2020.git"
+  },
+
+  "keywords": [],
+  "author": "MikeIv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MikeIv/Gulp-2020/issues"
+  },
+  "homepage": "https://github.com/MikeIv/Gulp-2020#readme"
+}

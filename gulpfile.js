@@ -1,110 +1,163 @@
 "use strict";
 
 const gulp = require("gulp"); // Подключаем Gulp
-const less = require("gulp-less"); //Подключаем Less пакет
+const less = require("gulp-less"); // Подключаем Less пакет
+const htmlmin = require('gulp-htmlmin');
+const fileinclude = require("gulp-file-include"); // Сборка шаблонов html
 const minifycss = require("gulp-csso"); // CSS минификатор
-const plumber = require("gulp-plumber");
-const autoprefixer = require("autoprefixer"); // Подключаем библиотеку для автопрефиксов
+const sourcemaps = require('gulp-sourcemaps'); // Карта css
+const plumber = require("gulp-plumber"); // Исключение прерывания выполнения задач при ошибке
 const postcss = require("gulp-postcss");
-const posthtml = require("gulp-posthtml");
+const autoprefixer = require("autoprefixer"); // Подключаем библиотеку для автопрефиксов
+const mqpacker = require("css-mqpacker"); // Pack same CSS media query rules into one using PostCSS
+const sortCSSmq = require('sort-css-media-queries'); // Sort your media-queries to the mobile-first methodology
 const rename = require("gulp-rename"); // Подключаем библиотеку для переименования файлов
 
-const server = require("browser-sync").create(); // Подключаем Browser Sync
+const babel = require("gulp-babel"); // JS
+const terser = require('gulp-terser'); // compressed es6+ code
+
+const sync = require("browser-sync").create(); // Подключаем Browser Sync
 const del = require("del"); // Подключаем библиотеку для удаления файлов и папок
 
-const sourcemaps = require('gulp-sourcemaps');
-const mqpacker = require("css-mqpacker");
-const sortCSSmq = require('sort-css-media-queries');
 
-const fileinclude = require("gulp-file-include");
-
-
-//
-gulp.task("clean", function () {
-    return del("build");
-});
+// Clean
+const clean = () => {
+  return del("build");
+};
+exports.clean = clean;
 
 
-gulp.task("copy", function () {
-    return gulp.src([
-        "src/fonts/**/*.{woff,woff2}",
-        "src/img/**",
-        "src/js/**",
-        "src/index.html"
-    ], {
-        base: "src"
-    })
-        .pipe(gulp.dest("build"));
-});
 
 
-gulp.task("css", function () {
-    return gulp.src("src/less/style.less")
-        .pipe(sourcemaps.init())
-        .pipe(plumber())
-        .pipe(less())
-        .pipe(postcss([
-            autoprefixer({}),
-            mqpacker({
-                sort: sortCSSmq
-            })
-        ]))
-        .pipe(gulp.dest("src/css"))
-        .pipe(gulp.dest("build/css"))
-        .pipe(minifycss())
-        .pipe(sourcemaps.write('.'))
-        .pipe(rename("style.min.css"))
-        .pipe(gulp.dest("build/css"))
-        .pipe(server.stream());
-});
+// HTML
+
+const html = () => {
+  gulp.src("src/index.html")
+    .pipe(htmlmin({
+      removeComments: true,
+      collapseWhitespace: true
+    }))
+    .pipe(gulp.dest("build/"))
+    .pipe(sync.stream());
+};
+exports.html = html;
 
 
-gulp.task("html", function () {
-    gulp.src("src/*.html")
-        .pipe(posthtml([
-            include()
-        ]))
-        .pipe(gulp.dest("build"))
-        .pipe(server.stream());
-});
+const fileincludehtml = () => {
+  return gulp.src("src/*_build.html")
+    .pipe(fileinclude({
+      prefix: "@@",
+      basepath: "@file"
+    }))
+    .pipe(rename(function (path) {
+      path.basename = path.basename.replace("_build", "");
+    }))
+    .pipe(gulp.dest("src/"))
+    .pipe(sync.reload({stream: true}));
+
+};
+exports.fileincludehtml = fileincludehtml;
 
 
-gulp.task("fileinclude", function () {
-    return gulp.src("src/*_build.html")
-        .pipe(fileinclude({
-            prefix: "@@",
-            basepath: "@file"
-        }))
-        .pipe(rename(function (path) {
-            path.basename = path.basename.replace("_build", "");
-        }))
-        .pipe(gulp.dest("src/"))
-        .pipe(server.reload({stream: true}));
-});
 
 
-gulp.task("build", gulp.series(
-    "clean",
-    "copy",
-    "css",
-));
+//CSS
+const css = () => {
+  return gulp.src("src/less/style.less")
+    .pipe(sourcemaps.init())
+    .pipe(plumber())
+    .pipe(less())
+    .pipe(postcss([
+      autoprefixer({}),
+      mqpacker({
+        sort: sortCSSmq
+      })
+    ]))
+    .pipe(gulp.dest("src/css"))
+    .pipe(gulp.dest("build/css"))
+    .pipe(minifycss())
+    .pipe(sourcemaps.write('.'))
 
-gulp.task("server", function () {
-    server.init({
-        server: "build/",
-        notify: false,
-        open: true,
-        cors: true,
-        ui: false
-    });
+    .pipe(rename("style.min.css"))
+    .pipe(gulp.dest("build/css"))
+    .pipe(sync.reload({stream: true}));
+};
+exports.css = css;
 
 
-    gulp.watch("src/less/**/*.less", gulp.series("css")).on("change", server.reload);
-    gulp.watch("src/*_build.html", gulp.parallel("fileinclude")).on("change", server.reload); // наблюдаем и исполняем
-    gulp.watch("src/html/*.html", gulp.parallel("fileinclude")).on("change", server.reload); // наблюдаем и исполняем
-    gulp.watch("src/*.html", gulp.series("build")).on("change", server.reload);
-    gulp.watch("src/js/*.js").on("change", server.reload);
-});
+// Scripts
+const scripts = () => {
+  return gulp.src('src/scripts/index.js')
+    .pipe(terser())
+    .pipe(gulp.dest('build'))
+    .pipe(sync.stream());
+};
+exports.scripts = scripts;
 
 
-gulp.task("default", gulp.series("build", "server")); // запускаем командой gulp ("default")
+
+
+
+// Copy
+const copy = () => {
+  return gulp.src([
+    "src/fonts/**/*.{woff,woff2}",
+    "src/img/**",
+    "src/scripts/**",
+    "src/index.html"
+  ], {
+    base: "src"
+  })
+    .pipe(gulp.dest("build"));
+};
+exports.copy = copy;
+
+
+
+
+// Server
+const server = () => {
+  sync.init({
+    server: "build/",
+    notify: false,
+    open: true,
+    cors: true,
+    ui: false
+  });
+};
+exports.server = server;
+
+
+// Watch
+const watch = () => {
+  gulp.watch("src/less/**/*.less", gulp.series(css)).on("change", sync.reload);
+  gulp.watch("src/*_build.html", gulp.series(fileincludehtml));
+  gulp.watch("src/html/*.html", gulp.series(fileincludehtml));
+
+  gulp.watch("src/index.html", gulp.series(html)).on("change", sync.reload);
+
+  gulp.watch('src/scripts/**/*.js', gulp.series(scripts));
+  gulp.watch([
+    'src/fonts/**/*',
+    'src/img/**/*',
+    'src/index.html',
+  ], gulp.series(copy));
+};
+exports.watch = watch;
+
+
+// Default
+
+exports.default = gulp.series(
+  gulp.parallel(
+    clean,
+
+  ),
+
+  css,
+  copy,
+  gulp.parallel(
+    watch,
+    server,
+  ),
+);
