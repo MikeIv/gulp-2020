@@ -2,7 +2,7 @@
 
 const gulp = require("gulp"); // Подключаем Gulp
 const less = require("gulp-less"); // Подключаем Less пакет
-const htmlmin = require('gulp-htmlmin');
+const htmlmin = require('gulp-htmlmin'); //html минификатор
 const fileinclude = require("gulp-file-include"); // Сборка шаблонов html
 const minifycss = require("gulp-csso"); // CSS минификатор
 const sourcemaps = require('gulp-sourcemaps'); // Карта css
@@ -14,6 +14,7 @@ const sortCSSmq = require('sort-css-media-queries'); // Sort your media-queries 
 const rename = require("gulp-rename"); // Подключаем библиотеку для переименования файлов
 
 const babel = require("gulp-babel"); // JS
+const uglify = require('gulp-uglify'); // JS сборщик
 const terser = require('gulp-terser'); // compressed es6+ code
 
 const sync = require("browser-sync").create(); // Подключаем Browser Sync
@@ -30,7 +31,6 @@ exports.clean = clean;
 
 
 // HTML
-
 const html = () => {
   gulp.src("src/index.html")
     .pipe(htmlmin({
@@ -85,16 +85,18 @@ const css = () => {
 exports.css = css;
 
 
-// Scripts
+// JS
 const scripts = () => {
-  return gulp.src('src/scripts/index.js')
+  return gulp.src('src/js/*.js')
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
     .pipe(terser())
-    .pipe(gulp.dest('build'))
+    .pipe(uglify())
+    .pipe(gulp.dest('build/js'))
     .pipe(sync.stream());
 };
 exports.scripts = scripts;
-
-
 
 
 
@@ -103,7 +105,8 @@ const copy = () => {
   return gulp.src([
     "src/fonts/**/*.{woff,woff2}",
     "src/img/**",
-    "src/scripts/**",
+    "src/js/**",
+    "src/page-*.html",
     "src/index.html"
   ], {
     base: "src"
@@ -111,7 +114,6 @@ const copy = () => {
     .pipe(gulp.dest("build"));
 };
 exports.copy = copy;
-
 
 
 
@@ -133,10 +135,11 @@ const watch = () => {
   gulp.watch("src/less/**/*.less", gulp.series(css)).on("change", sync.reload);
   gulp.watch("src/*_build.html", gulp.series(fileincludehtml));
   gulp.watch("src/html/*.html", gulp.series(fileincludehtml));
+  gulp.watch("src/page-*.html", gulp.series(fileincludehtml));
 
   gulp.watch("src/index.html", gulp.series(html)).on("change", sync.reload);
 
-  gulp.watch('src/scripts/**/*.js', gulp.series(scripts));
+  gulp.watch('src/js/**/*.js', gulp.series(scripts));
   gulp.watch([
     'src/fonts/**/*',
     'src/img/**/*',
