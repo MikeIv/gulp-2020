@@ -2,10 +2,10 @@
   "name": "gulp-2020",
   "version": "1.0.0",
   "private": true,
-  "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.11.1",
-    "browser-sync": "^2.26.12",
+    "@babel/core": "^7.13.15",
+    "@babel/preset-env": "^7.13.15",
+    "browser-sync": "^2.11.1",
     "css-mqpacker": "^7.0.0",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
@@ -21,6 +21,7 @@
     "gulp-rename": "^2.0.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-terser": "^1.3.2",
+    "gulp-uglify": "^3.0.2",
     "sort-css-media-queries": "^1.5.0"
   }
 }
